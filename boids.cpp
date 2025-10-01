@@ -27,7 +27,7 @@ const float ALIGNMENT_RADIUS = 75.0f;
 
 //COHESION:
 //Defines the radius of how many boids to interact with to steer to the center
-const float COHESION_RADIUS = 100.0f;
+const float COHESION_RADIUS = 150.0f;
 const float COHESION_AMPLIFIER = 10.0f;
 
 
@@ -53,7 +53,7 @@ class Boid {
         Boid(float _radius, sf::Vector2f _pos, sf::Vector2f _velocity, float _rotation) : radius(_radius), pos(_pos), rotation(_rotation), velocity(_velocity) {
             obj.setPointCount(3);
             obj.setOrigin(radius/2, radius/2);
-            obj.setFillColor(sf::Color(14, 109, 204, 255));
+            obj.setFillColor(sf::Color(14, 109+rand()%50, 150+rand()%100, 255));
             obj.setRadius(radius);
             obj.scale(0.6, 1);
         };
@@ -134,7 +134,7 @@ int main() {
 
 
     for (int i = 0; i < boids_amount; ++i) {
-        boids.emplace_back(Boid(15.0f, sf::Vector2f(rand()%WIDTH, rand()%HEIGHT), getRandomVel(), 25*i));
+        boids.emplace_back(Boid(10.0f, sf::Vector2f(rand()%WIDTH, rand()%HEIGHT), getRandomVel(), 25*i));
     }
 
 
@@ -156,7 +156,7 @@ int main() {
         
         for (int i = 0; i < boids.size(); ++i) {
             //Repelling Force Vars
-            sf::Vector2f moveVector;
+            sf::Vector2f moveVector(0, 0);
             int neighbours = 0;
             //Aligning Force Vectors
             std::vector<float> neighbourVectorX = {};
@@ -175,7 +175,7 @@ int main() {
                     float dx = boids[i].getPos().x - selectedBoidPos.x;
                     float dy = boids[i].getPos().y - selectedBoidPos.y;
 
-                    // Wrap-around correction for x
+                    //Wrap-around correction for x
                     if (abs(dx) > WIDTH/2) {
                         if (dx > 0) {
                             dx -= WIDTH;
@@ -183,7 +183,7 @@ int main() {
                             dx += WIDTH;
                         }
                     }
-                    // Wrap-around correction for y
+                    //Wrap-around correction for y
                     if (abs(dy) > HEIGHT/2) {
                         if (dy > 0) {
                             dy -= HEIGHT;
@@ -211,7 +211,7 @@ int main() {
 
                     if (distance > 0) {
                         sf::Vector2f posDiff(dx, dy);
-                        float posDiffLength = sqrt(dx*dx + dy*dy);
+                        float posDiffLength = distance;
                         sf::Vector2f posDiffNorm = sf::Vector2f(dx / posDiffLength, dy / posDiffLength);
 
                         sf::Vector2f separationVector = sf::Vector2f(posDiffNorm.x * (1.0f/distance), posDiffNorm.y * (1.0f/distance));
