@@ -13,8 +13,6 @@ const float CONSTANT_BOID_SPEED = 3.0f;
 
 
 //SEPERATION:
-//How large the repelling force can be at most
-const float MAX_FORCE = 10;
 //Amplitude for how strong the repelling force between the boids is
 const float FORCE_AMPLITUDE = 250.0f;
 
@@ -274,9 +272,6 @@ int main() {
                 moveVector /= float(neighbours);
 
                 float forceLength = sqrt(moveVector.x*moveVector.x + moveVector.y*moveVector.y);
-                if (forceLength > MAX_FORCE) {
-                    moveVector = (moveVector / forceLength) * MAX_FORCE;
-                }
 
                 moveVector *= FORCE_AMPLITUDE;
                 moveVector += sf::Vector2f(floatXSumAvarege*AVAREGE_FORCE_AMPLITUDE, floatYSumAvarege*AVAREGE_FORCE_AMPLITUDE);
