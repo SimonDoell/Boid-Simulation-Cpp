@@ -168,27 +168,35 @@ int main() {
             for (int ii = 0; ii < boids.size(); ++ii) {
                 if (i != ii) {
 
-                    sf::Vector2f selectedBoidPos = boids[ii].getPos();
+                    sf::Vector2f wrappedBoidPos = boids[ii].getPos();
 
-                    float dx = boids[i].getPos().x - selectedBoidPos.x;
-                    float dy = boids[i].getPos().y - selectedBoidPos.y;
+                    float dx = boids[i].getPos().x - wrappedBoidPos.x;
+                    float dy = boids[i].getPos().y - wrappedBoidPos.y;
 
-                    //Wrap-around correction for x
+                    //Wrap-around correction
                     if (abs(dx) > WIDTH/2) {
                         if (dx > 0) {
                             dx -= WIDTH;
+                            wrappedBoidPos.x -= float(WIDTH);
                         } else {
                             dx += WIDTH;
+                            wrappedBoidPos.x += float(WIDTH);
                         }
-                    }
-                    //Wrap-around correction for y
+                    };
                     if (abs(dy) > HEIGHT/2) {
                         if (dy > 0) {
                             dy -= HEIGHT;
+                            wrappedBoidPos.y -= float(HEIGHT);
                         } else {
                             dy += HEIGHT;
+                            wrappedBoidPos.y += float(HEIGHT);
                         }
-                    }
+                    };
+
+
+
+
+                    if (abs(dy) > HEIGHT/2) {if (dy > 0) {dy -= HEIGHT;} else {dy += HEIGHT;}}
 
                     float distance = sqrt(dx*dx + dy*dy);
 
@@ -202,7 +210,7 @@ int main() {
                     }
 
                     if (distance < COHESION_RADIUS) {
-                        cohesionForcePosVector.emplace_back(selectedBoidPos);
+                        cohesionForcePosVector.emplace_back(wrappedBoidPos);
                     }
 
                     
